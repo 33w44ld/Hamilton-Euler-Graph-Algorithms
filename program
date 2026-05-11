@@ -2,6 +2,8 @@
 
 import argparse
 import sys
+from graph import Graph
+from generators import generate_hamiltonian, generate_non_hamiltonian
 
 def print_help():
     print("Help \tShow this message")
@@ -19,17 +21,24 @@ def main():
     args = parser.parse_args()
 
     try: 
+        current_graph = None
+
         if args.hamilton:
             nodes_input = input("nodes> ")
             saturations_input = input("saturations> ")
+            current_graph = generate_hamiltonian(int(nodes_input), int(saturations_input))
         elif args.non_hamilton:
             nodes_input = input("nodes> ")
+            current_graph = generate_non_hamiltonian(int(nodes_input))
         while True:
             action_input = input("action> ").strip().lower()
             if action_input == "help":
                 print_help()
             if action_input == "print":
-                pass
+                if current_graph:
+                    print(current_graph)
+                else:
+                    print("Brak grafu do wyświetlenia.")
             elif action_input == "euler":
                 pass
             elif action_input == "hamilton":
