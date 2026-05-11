@@ -4,6 +4,7 @@ import argparse
 import sys
 from graph import Graph
 from generators import generate_hamiltonian, generate_non_hamiltonian
+from print_action import run_print_action
 
 def print_help():
     print("Help \tShow this message")
@@ -36,7 +37,7 @@ def main():
                 print_help()
             if action_input == "print":
                 if current_graph:
-                    print(current_graph)
+                    run_print_action(current_graph)
                 else:
                     print("Brak grafu do wyświetlenia.")
             elif action_input == "euler":
