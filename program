@@ -5,6 +5,8 @@ import sys
 from graph import Graph
 from generators import generate_hamiltonian, generate_non_hamiltonian
 from print_action import run_print_action
+from hamilton_cycle import find_hamiltonian_cycle
+from euler_cycle import find_eulerian_cycle
 
 def print_help():
     print("Help \tShow this message")
@@ -31,30 +33,58 @@ def main():
         elif args.non_hamilton:
             nodes_input = input("nodes> ")
             current_graph = generate_non_hamiltonian(int(nodes_input))
+            
         while True:
             action_input = input("action> ").strip().lower()
+            
             if action_input == "help":
                 print_help()
-            if action_input == "print":
+            elif action_input == "print":
                 if current_graph:
                     run_print_action(current_graph)
                 else:
                     print("Brak grafu do wyświetlenia.")
             elif action_input == "euler":
-                pass
+                if current_graph is None:
+                    print("Brak wygenerowanego grafu. Najpierw wygeneruj graf.")
+                else:
+                    print("Szukanie cyklu Eulera...")
+                    cycle = find_eulerian_cycle(current_graph)
+                    if cycle:
+                        print("Znaleziono cykl Eulera:")
+                        print(" -> ".join(map(str, cycle)))
+                    else:
+                        print("Graf NIE zawiera cyklu Eulera (nie wszystkie wierzchołki mają stopień parzysty lub graf jest niespójny).")
             elif action_input == "hamilton":
-                pass
+                if current_graph is None:
+                    print("Brak wygenerowanego grafu. Najpierw wygeneruj graf.")
+                else:
+                    print("Szukanie cyklu Hamiltona...")
+                    cycle = find_hamiltonian_cycle(current_graph)
+                    if cycle:
+                        print("Znaleziono cykl Hamiltona:")
+                        print(" -> ".join(map(str, cycle)))
+                    else:
+                        print("Graf NIE zawiera cyklu Hamiltona.")
             elif action_input == "stats":
-                pass
+                if current_graph is None:
+                    print("Brak wygenerowanego grafu.")
+                else:
+                    print(f"\n--- Statystyki grafu ---")
+                    print(f"Liczba wierzchołków: {current_graph.num_nodes}")
+                    print(f"Liczba krawędzi: {current_graph.num_edges}")
+                    print("Stopnie wierzchołków:")
+                    for u in range(current_graph.num_nodes):
+                        print(f"  Wierzchołek {u}: stopień = {current_graph.get_degree(u)}")
+                    print("------------------------\n")
             elif action_input == "exit":
                 break
+                
     except Exception as e:
         print(f"Błąd danych wejściowych: {e}", file=sys.stderr)
         sys.exit(1)
     except EOFError:
-        pass
-    except KeyboardInterrupt:
-        print()
+        sys.exit(0)
 
 if __name__ == "__main__":
     main()
