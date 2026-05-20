@@ -1,12 +1,14 @@
 #! /usr/bin/env python3
 
 import argparse
+import cmd
 import sys
 from graph import Graph
 from generators import generate_hamiltonian, generate_non_hamiltonian
 from print_action import run_print_action
 from hamilton_cycle import find_hamiltonian_cycle
 from euler_cycle import find_eulerian_cycle
+from export_action import run_export_action
 
 def print_help():
     print("Help \tShow this message")
@@ -14,6 +16,7 @@ def print_help():
     print("Euler \tFind an Eulerian cycle in the graph")
     print("Hamilton \tFind a Hamiltonian cycle in the graph")
     print("Stats \tShow statistics about the graph")
+    print("Export \tExport graph to TikZ format")
     print("Exit \tExit the program")
 
 def main():
@@ -77,6 +80,8 @@ def main():
                     for u in range(current_graph.num_nodes):
                         print(f"  Wierzchołek {u}: stopień = {current_graph.get_degree(u)}")
                     print("------------------------\n")
+            elif action_input == "export":
+                run_export_action(current_graph)
             elif action_input == "exit":
                 break
                 
